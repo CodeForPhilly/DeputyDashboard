@@ -1,8 +1,8 @@
-# cityx
-# Project Name - City X
+# DeputyDashboard
+# Project Name - DeputyDashboard
 
-A mobile app that aggregates L&I data sets
-Goal:  Make sheriff sale data available to all via a mobile app
+There's a new Sheriff in town...
+Goal:  Make parcel data available and quickly searchable via a dashboard
 
 
 ## Installation
