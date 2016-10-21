@@ -1,0 +1,109 @@
+<div id="ddMain"  ng-controller="DashboardController as ul" ng-cloak flex-gt-xs="25" style="height:506px;z-index:2" layout="column" layout-align="start start">
+
+	<md-toolbar class="md-whiteframe-4dp" aria-hidden="false">
+      <div class="md-toolbar-tools" layout-padding>
+      	<md-button hide show-gt-sm class="md-icon-button" ng-click="ul.reportIssue($event)" aria-label="Show issues dialog">
+			<md-icon md-font-icon="icon-help" ng-style="{'color':'#00A','height':'24px','font-size':'24px'}"></md-icon>
+		</md-button>
+      	<h2 class="mainTitle">DD - Philadelphia</h2>
+      
+      <span flex="5"></span>
+     
+       
+        <span flex></span>
+        
+		<md-button class="md-icon-button" ng-click="ul.toggleList('right')" aria-label="Show Results List">
+			<md-icon md-font-icon="icon-more_vert" ng-style="{'font-size': '24px'}"></md-icon>
+		</md-button>
+      </div>
+    </md-toolbar>
+
+    <md-content layout-fill flex>
+    <md-toolbar class="md-whiteframe-2dp md-accent md-hue-2" aria-hidden="false">
+    	<div class="md-toolbar-tools" layout-padding layout-xs="column">
+	       <div flex-gt-xs="30" flex="85" class="toolbarSearchGrey">
+			  <md-input-container>
+		        <label>Choose Neighborhood(s)</label>
+		        <md-select md-on-open="loadNeighborhoods()" ng-model="$root.activeSearch.neighborhoods" multiple>
+		            <md-option ng-value="n" ng-repeat="n in $root.neighborhoods">{{n.listname}}</md-option>
+		        </md-select>
+		        <!-- <md-button ng-click="$root.toggleRight()" class=" md-hue-2" style="font-size:padding:5px;margin-top:20px;"><md-icon md-font-icon="icon-sort" alt="edit" ng-style="{'font-size':'24px'}"></md-icon> Filters</md-button> -->
+		      </md-input-container>
+			</div>
+			<span flex></span>
+       </div>
+  	</md-toolbar>
+
+    
+    <div class="ext-content">
+		<md-content>
+	    <md-tabs md-dynamic-height md-border-bottom>
+	      <md-tab label="details">
+	      <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+		      <md-nav-item md-nav-click="goto('3')" name="3"><img src="./level3.png" height="30px"></md-nav-item>
+		      <md-nav-item md-nav-click="goto('2')" name="2"><img src="./level2.png" height="30px"></md-nav-item>
+		      <md-nav-item md-nav-click="goto('1')" name="1"><img src="./level1.png" height="30px"></md-nav-item>
+		      <!-- these require actual routing with ui-router or ng-route, so they won't work in the demo
+		      <md-nav-item md-nav-sref="app.page4" name="page4">Page Four</md-nav-item>
+		      <md-nav-item md-nav-href="#page5" name="page5">Page Five</md-nav-item>
+		      -->
+		      <span flex></span>
+		      <md-button class="md-icon-button" ng-click="advancedSearch()">
+			        <md-tooltip md-direction="bottom">
+			        Add a filter
+			        </md-tooltip>
+			        <md-icon md-font-icon="icon-playlist_add" ng-style="{'font-size': '24px','color':'rgba(2,136,209,0.87)'}"></md-icon>
+		        </md-button>
+		    </md-nav-bar>
+	      	<md-card flex-gt-xs="60" md-theme-watch>
+		        <md-card-title>
+		          <md-card-title-text>
+		            <span class="md-headline">{{currentNavItem | showTitle}}</span>
+		            <span class="md-subhead">{{currentNavItem | showDescription}}</span>
+		            <span class="md-subhead">
+		            	<md-input-container style="margin-right: 10px;" ng-show="(currentNavItem==3)">
+		        		<label>Sale Date</label>
+		            	<md-select flex="80" ng-model="sheriffDate">
+				          <md-option ng-repeat="date in ul.dates" value="{{date}}">{{date}}</md-option>
+				        </md-select>
+				        </md-input-container>
+		            </span>
+		          </md-card-title-text>
+		          <md-card-title-media>
+		            <div class="md-media-lg card-media">
+		            	<img ng-src="{{'./level'+currentNavItem+'.png'}}" height="60">
+		            </div>
+		          </md-card-title-media>
+		        </md-card-title>
+		        <md-card-content>
+		        <p>Data table here</p>
+				</md-card-content>
+		        <md-card-actions layout="row" layout-align="end center">
+		        	<md-button>Expand</md-button>
+		        	<span flex></span>
+		          <md-button>Graphs and Charts</md-button>
+		          <md-button>Print Report</md-button>
+		        </md-card-actions>
+	      	</md-card>
+		  </md-tab>
+		  <md-tab label="map">
+
+	      <div flex-gt-xs="80" class="md-whiteframe-1dp" layout="column" layout-margin ng-controller="MapController as map">
+			<div layout="row">
+				<md-input-container flex>
+				<label>Search Map</label>
+				<input ng-model="user.searchQuery">
+				</md-input-container>
+				<md-button hide-gt-md class="md-icon-button" ng-click="ul.toggleList('left')" aria-label="Show User List">
+				<md-icon md-font-icon="icon-layers" ng-style="{'font-size': '34px','height':'50px','color':'#1A75C2'}"></md-icon>
+				</md-button>
+			</div>
+	      	<div flex id="map-canvas" style="min-height:150px" ></div>
+		  </div>
+		  </md-tab>
+	    </md-tabs>
+	</md-content>
+    </div>
+    	
+	</md-content>
+</div>

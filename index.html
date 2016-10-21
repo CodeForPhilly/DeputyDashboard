@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- start: Meta. Tagz -->
+        
+        <title>DeputyDashboard</title>
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" > 
+ 
+        <link href="./themes/material/css/icomoon.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+        <link href="./bower_components/angular-material/angular-material.min.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="./bower_components/angular-material-data-table/dist/md-data-table.min.css"/>
+        <link href="./themes/material/css/app.css" rel="stylesheet">
+        <!-- style sheet -->
+    </head>
+    <body ng-app="materialApp" ng-controller="LandingCtrl as ul">
+        <div layout="column" layout-fill>
+            <div ui-view flex layout="column"></div>
+            <footer ng-cloak layout-align="end end" layout-align-xs="start start" layout="row">
+              <span flex show-gt-xs hide></span>
+              <md-content layout-margin layout="row" layout-xs="row" style="color:#afafaf">
+              <p><a href="">About</a></p>
+              <p><a href="">Privacy</a></p>
+              <p>&copy; 2016 deputydashboard</p>
+            </md-content>
+            </footer>
+        </div>
+
+    <!-- Script Files -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2ROrsm75GOmLCISyIEs1y02_OVU3vS4g&libraries=places"></script>
+    <script type="text/javascript" src="./bower_components/angular/angular.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+    <script src="./bower_components/angular-route/angular-route.js"></script>
+    <script src="./bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="./bower_components/angularfire/dist/angularfire.js"></script>
+    <script type="text/javascript" src="./bower_components/lodash/dist/lodash.min.js"></script>
+    
+    <script type="text/javascript" src="./bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script type="text/javascript" src="./bower_components/moment/moment.js"></script>
+    <script type="text/javascript" src="./bower_components/angular-material-data-table/dist/md-data-table.min.js"></script>
+    <script type="text/javascript" src="./bower_components/angular-animate/angular-animate.min.js"></script>
+    <script type="text/javascript" src="./bower_components/angular-aria/angular-aria.min.js"></script>
+    <script type="text/javascript" src="./bower_components/angular-material/angular-material.min.js"></script>
+    <script src="./themes/material/js/app.module.js"></script>
+    <script src="./themes/material/js/app.storage.js"></script>
+    <script src="./themes/material/js/dashboard.js"></script>
+    <script src="./themes/material/js/landing.js"></script>
+    <script src="./themes/material/js/map.js"></script>
+    <script src="./themes/material/js/home.js"></script>
+    <script src="./themes/material/js/property.js"></script>
+        
+  </body>
+</html>
