@@ -1,0 +1,44 @@
+<md-dialog aria-label="land" style="background:#47AAFD !important;">
+<form ng-cloak>
+  <md-toolbar style="background:#47AAFD !important;">
+      <div>
+       
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="closeDialog()">
+          <md-icon md-font-icon="icon-close" ng-style="{'font-size':'34px','color':'#ffffff'}" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+  <md-dialog-content style="max-width:800px;max-height:810px;background:#47AAFD;color:#fff">
+  <div layout-align="center center" layout="column" layout-padding>
+    <h2>deputy dashboard</h2>
+    <h4>We're still polishing up things and will be ready for you soon! We'll drop you a note with more information shortly! <br><strong>Note: if you are a city employee, please feel free to enter your city email address for proper verification.</strong></h4>
+  </div>
+  <div class="md-dialog-content" layout="column" layout-xs="column" style="border-bottom:1px solid #ffffff" layout-margin>
+    <md-input-container flex md-no-float>
+      <label>Email</label>
+      <input type="email" ng-model="email">
+    </md-input-container>
+    <md-input-container flex md-no-float>
+      <label>Name (Optional)</label>
+      <input type="text" ng-model="name">
+    </md-input-container>
+    <md-select ng-model="region" placeholder="Choose a Region" class="md-no-underline">
+        <md-option value="phl">Philadelphia</md-option>
+        <md-option value="de">Delaware</md-option>
+      </md-select>
+  </div>
+  
+  </md-dialog-content>
+  <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="closeDialog()">
+       close
+      </md-button>
+      <md-button ng-click="answer('send')">
+        Send
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

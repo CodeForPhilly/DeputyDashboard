@@ -2,40 +2,46 @@
 "use strict";
 angular
   .module('materialApp')
-  .controller('MapController', [
-  '$rootScope', '$http','$location','$mdToast',
-  MapController
-])
-.controller('DashboardController', function($rootScope,$state,$scope,$mdBottomSheet,$mdDialog,$mdToast,$http,$filter,$mdMedia,$timeout,$firebaseArray,$sce) {
+
+.controller('DashboardController', function($rootScope,$state,$scope,$mdBottomSheet,$mdDialog,$mdToast,$http,$filter,$mdMedia,$timeout,$firebaseArray,$sce,fbStorage) {
     $rootScope.gAddress = null;
     $rootScope.showSort = false;
   	$rootScope.parcelId = null;
-    $scope.currentNavItem = '3';
+    $rootScope.currentNavItem = '3';
+    var vm = this;
+    $rootScope.levels=[
+    {name:"Top",value:3},
+    {name:"Secondary",value:2},
+    {name:"Vacant",value:1},
+    ]
 
     // $scope.showCountdown = 
     $scope.showList = function() {
-    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
-    $mdDialog.show({
-      controller: DialogController,
-      templateUrl: './themes/material/components/countdown.html',
-      parent: angular.element(document.body),
-      clickOutsideToClose:true,
-       fullscreen: true
-      })
-    .then(function(answer) {
-      $scope.status = 'You said the information was "' + answer + '".';
-    }, function() {
-      $scope.status = 'You cancelled the dialog.';
-    });
+      var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+      $mdDialog.show({
+        controller: DialogController,
+        templateUrl: './themes/material/components/countdown.html',
+        parent: angular.element(document.body),
+        clickOutsideToClose:true,
+         fullscreen: true
+        })
+      .then(function(answer) {
+        $scope.status = 'You said the information was "' + answer + '".';
+      }, function() {
+        $scope.status = 'You cancelled the dialog.';
+      });
 
-    $scope.$watch(function() {
-      return $mdMedia('xs') || $mdMedia('sm');
-    }, function(wantsFullScreen) {
-      $scope.customFullscreen = (wantsFullScreen === true);
-    });
-  };
+      $scope.$watch(function() {
+        return $mdMedia('xs') || $mdMedia('sm');
+      }, function(wantsFullScreen) {
+        $scope.customFullscreen = (wantsFullScreen === true);
+      });
+    };
+    
 
-  $scope.showList();
+    
+
+  // $scope.showList();
 
 
   function DialogController($scope, $mdDialog) {
@@ -72,16 +78,13 @@ angular
     ];
     
     var config = {
-        apiKey: "AIzaSyCmzpXA9l45E9DthYOVtdIFEYrgGD5fS",
-        databaseURL: "https://project-5024312928467115441.firebaseio.com",
-        storageBucket: "project-5024312928467115441.appspot.com",
-      };
-      firebase.initializeApp(config);
+      apiKey: "AIzaSyCmzpXA9l45E9DthYOVtdIFEYrgGD5fS",
+      databaseURL: "https://project-5024312928467115441.firebaseio.com",
+      storageBucket: "project-5024312928467115441.appspot.com",
+    };
+    firebase.initializeApp(config);
 
-    firebase.database().ref().child('neighborhoods').child('philly').once('value').then(function(snapshot) {
-        $rootScope.neighborhoods = snapshot.val();
-        // ...
-      });
+    
 
 
   	$mdToast.show(
@@ -121,166 +124,3 @@ angular
     
   }
 });
-
-function MapController($rootScope,$scope,$location,$route,$mdSidenav, $mdBottomSheet,$mdDialog,$mdToast, $log,$state,$stateParams, $q,$filter,$http,$mdMedia,$firebaseArray,$firebaseObject){
-  var vm = this;
-  vm.mapStyle = [
-    {
-      "elementType": "geometry",
-      "stylers": [
-        { "invert_lightness": true }
-      ]
-    },{
-      "featureType": "landscape",
-      "stylers": [
-        { "visibility": "simplified" },
-        { "invert_lightness": true }
-      ]
-    },{
-      "featureType": "landscape",
-      "elementType": "geometry.fill",
-      "stylers": [
-        { "visibility": "on" },
-        { "lightness": 100 },
-        { "color": "#f9fff9" }
-      ]
-    },{
-      "featureType": "road",
-      "elementType": "geometry.fill",
-      "stylers": [
-        { "lightness": 77 }
-      ]
-    },{
-      "featureType": "road",
-      "elementType": "labels.text",
-      "stylers": [
-        { "visibility": "simplified" }
-      ]
-    },{
-    },{
-      "featureType": "transit",
-      "elementType": "geometry.fill",
-      "stylers": [
-        { "color": "#f14728" },
-        { "weight": 1 }
-      ]
-    },{
-      "featureType": "water",
-      "elementType": "geometry.fill",
-      "stylers": [
-        { "lightness": 69 }
-      ]
-    },{
-      "featureType": "water",
-      "elementType": "labels.text.stroke",
-      "stylers": [
-        { "visibility": "simplified" }
-      ]
-    },{
-      "featureType": "administrative.neighborhood",
-      "elementType": "labels",
-      "stylers": [
-        { "visibility": "simplified" },
-        { "saturation": -30 },
-        { "color": "#252651" },
-        { "invert_lightness": true },
-        { "lightness": -41 }
-      ]
-    },{
-      "featureType": "poi",
-      "elementType": "geometry.fill",
-      "stylers": [
-        { "lightness": 52 }
-      ]
-    },{
-      "featureType": "poi",
-      "elementType": "labels.text",
-      "stylers": [
-        { "visibility": "simplified" }
-      ]
-    },{
-      "featureType": "road",
-      "elementType": "geometry.stroke",
-      "stylers": [
-        { "lightness": 87 }
-      ]
-    },{
-      "featureType": "poi.school",
-      "elementType": "geometry",
-      "stylers": [
-        { "lightness": 12 }
-      ]
-    },{
-      "featureType": "poi.medical",
-      "elementType": "geometry.fill",
-      "stylers": [
-        { "invert_lightness": true },
-        { "visibility": "on" },
-        { "lightness": 44 }
-      ]
-    },{
-      "featureType": "road",
-      "elementType": "labels.icon",
-      "stylers": [
-        { "visibility": "simplified" }
-      ]
-    },{
-    }
-    ];
-
-    vm.radii = [
-      {size:50,  name:"50m"},
-      {size:1000,name:"1000m"},
-      {size:1500,name:"1500m"}
-    ];
-
-    vm.styledMap = new google.maps.StyledMapType(vm.mapStyle,
-      {name: "Map"});
-    vm.radius = 50;
-    vm.locations = {
-      "PDHQ": [39.954188,-75.1506003]
-    };
-
-    
-
-    $rootScope.districtsLayer = new google.maps.FusionTablesLayer({
-      query: {
-      select: 'geometry',
-      from: '19UdxVSBptGvN-hb4QW80X9h7fxjyxD7BF_y7MrS8'
-      },
-      styles: [{
-      polygonOptions: {
-        strokeColor: "#5d3829",
-        fillColor: "#92a381",
-        strokeOpacity: "0.7",
-        strokeWeight: "int",
-        fillOpacity:"0.1"
-      }}]
-    });
-
-    vm.mapCenter = new google.maps.LatLng(39.954188,-75.1506003);
-    var mapOptions = {
-      zoom: 9,
-      center: vm.mapCenter,
-      mapTypeControlOptions:{
-        mapTypeIds: [google.maps.MapTypeId.SATELLITE,'map_style']
-      }
-    };
-    if($rootScope.map === undefined){
-      $rootScope.map = new google.maps.Map(document.getElementById("map-canvas"),
-        mapOptions);
-      $rootScope.map.mapTypes.set('map_style', vm.styledMap);
-      $rootScope.map.setMapTypeId('map_style');
-      $rootScope.districtsLayer.setMap($rootScope.map);
-    }
-      
-    /* Adds new vehicle markers to the map when they enter the query */
-vm.showDetails = function(){
-  $mdToast.show(
-    $mdToast.simple()
-    .content("This action is under construction.")
-    .position('top right')
-    .hideDelay(4000)
-  );
-}
-}

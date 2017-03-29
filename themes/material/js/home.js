@@ -6,7 +6,7 @@ angular
 	$rootScope.gAddress = null;
 	$rootScope.showSort = false;
   	$rootScope.parcelId = null;
-
+    fbStorage.anonAuth();
   	$mdToast.show(
         $mdToast.simple()
         .content("Home")

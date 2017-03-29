@@ -1,0 +1,66 @@
+
+<div layout-fill flex ng-controller="PermitController as vm" ng-cloak flex-gt-xs="25" layout="column">
+
+<md-card ng-repeat="p in vm.permitResults" flex-gt-xs="100" md-theme-watch>
+    <md-card-title style="padding: 10px 16px 16px;">
+      <md-card-title-text>
+        <span class="md-headline">City of Philadelphia<br><small>Lane Closure Permit</small></span>
+        <span class="md-subhead">{{p.ADDRESS}}</span>
+        <span class="md-subhead">{{p.EXPIRATIONDATE | togo}}</span>
+        <div layout="row">
+        <div class="info-box" flex="50">
+        	<div class="info-line">
+                <div class="title">Permit No.</div>
+                <div class="info">{{p.PERMITNUMBER}}</div>
+            </div>
+            <div class="info-line">
+                <div class="title">Permit Type</div>
+                <div class="info">{{p.PERMITTYPE}}</div>
+            </div>
+
+            <div class="info-line">
+                <div class="title">Occupancy Type</div>
+                <div class="info">{{p.OCCUPANCYTYPE}}</div>
+            </div>
+        </div>
+
+        <div class="info-box">
+        	<div class="info-line">
+                <div class="title">Purpose</div>
+                <div class="info">{{p.PURPOSE}}</div>
+            </div>
+            <div class="info-line">
+                <div class="title">Effective Date</div>
+                <div class="info">{{p.EFFECTIVEDATE | formatTimeRelative}}</div>
+            </div>
+
+            <div class="info-line">
+                <div class="title">Expiration Date</div>
+                <div class="info">{{p.EXPIRATIONDATE | formatTimeRelative}}</div>
+            </div>
+        </div>
+    </div>
+      </md-card-title-text>
+      <md-card-title-media>
+    <div class="md-media-xl card-media" show-gt-xs hide>
+    	<img ng-src="{{p.qr.image}}">
+    </div>
+  </md-card-title-media>
+    </md-card-title>
+    <md-card-content layout="column" layout-align="space-between">
+    <div class="md-media-md card-media" show-xs hide>
+    	<a ng-href="{{p.qr.image}}">
+    	<img height="280px" ng-src="{{p.qr.image}}">
+    </a>
+    </div>
+    <md-divider></md-divider>
+    <md-card-actions layout="row" layout-align="end center">
+    
+    	<md-button hide-xs class="md-primary" ng-click="vm.viewMap()">Source</md-button>
+    	<span flex></span>
+      <md-button ng-href="{{p.PERMITNUMBER | formatStreetPermitURL}}">View Permit</md-button>
+      <md-button class="md-icon-button" ng-click="vm.viewMap()"><md-icon md-font-icon="icon-map" ng-style="{'font-size': '24px'}"></md-icon></md-button>
+    </md-card-actions>
+    </md-card-content>
+	</md-card>
+</div>

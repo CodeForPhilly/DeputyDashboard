@@ -6,11 +6,12 @@
 
     function storage($firebaseAuth,$mdDialog,$rootScope,$mdMedia,$mdToast) {
     	var config = {
-			apiKey: "AIzaSyCmzpXA9l45E9DthYOVtdIFEYrgGD5fS-Q",
-			authDomain: "project-5024312928467115441.firebaseapp.com",
-			databaseURL: "https://project-5024312928467115441.firebaseio.com",
-			storageBucket: "project-5024312928467115441.appspot.com",
-		};
+		    apiKey: "AIzaSyDasyvVqSGPEM9VQZmC34j1mnu4FSoF1ZQ",
+		    authDomain: "deputydashboard.firebaseapp.com",
+		    databaseURL: "https://deputydashboard.firebaseio.com",
+		    storageBucket: "deputydashboard.appspot.com",
+		    messagingSenderId: "39752519200"
+		  };
 		firebase.initializeApp(config);
 
 		var auth = $firebaseAuth();
@@ -18,6 +19,7 @@
 
 		service.onAuthChange = authChange;
 		service.emailAuth = emailAuth;
+		service.anonAuth = anonAuth;
 		service.signOut = signOut;
 		service.register = register;
 		service.setParcelNote = setParcelNote;
@@ -57,6 +59,14 @@
 		function emailAuth(email,password){
 			auth.$signInWithEmailAndPassword(email,password).then(function(firebaseUser){
 	          console.log(firebaseUser) 
+	        }).catch(function(error){
+	          console.log(error);
+	        })
+		}
+
+		function anonAuth(){
+			auth.$signInAnonymously().then(function(firebaseUser){
+	          $rootScope.user = firebaseUser;
 	        }).catch(function(error){
 	          console.log(error);
 	        })

@@ -1,9 +1,249 @@
-<div layout="row" layout-align="center center" flex>
-    <span flex-gt-xs="20"></span>
-<div ng-cloak flex-gt-xs="25" style="height:506px;z-index:2" layout="column" layout-align="center center">
-  <p>
-    <md-button ng-href="/#/dd/philly"><img src="./deputy.png"></md-button>
-  </p>
+<md-toolbar ng-cloak class="md-whiteframe-4dp" aria-hidden="false">
+          <div class="md-toolbar-tools" layout-padding>
+            <md-button class="md-icon-button" ng-click="ul.reportIssue($event)" aria-label="Show issues dialog">
+            <md-icon md-font-icon="icon-star" ng-style="{'color':'#fff','height':'24px','font-size':'24px'}"></md-icon>
+            </md-button>
+            <h2 class="mainTitle" style="color:#fff">d<sup>2</sup> - Philly</h2>
+
+            <span flex="5"></span>
+
+
+            <span flex></span>
+            <md-button class="md-accent md-hue-2" ng-click="land()">
+              <md-tooltip md-direction="bottom">
+              What is this?
+              </md-tooltip>
+              <span style="text-transform: initial;">About</span>
+            </md-button>
+            <md-button class="md-icon-button" ng-click="ul.toggleList('right')" aria-label="Show Results List">
+            <md-icon md-font-icon="icon-more_vert" ng-style="{'font-size': '24px','color':'#fff'}"></md-icon>
+            </md-button>
+          </div>
+        </md-toolbar>
+<div layout="row" layout-align="start start">
+<div ng-cloak class="md-whiteframe-1dp" style="height:206px;background:#fff" layout="row" layout-align="start start" layout-fill>
+  <span flex="10"></span>
+  <div style="margin-top:10px">
+  	<h2>Welcome to Deputy Dashboard</h2>
+  	<p style="color:rgba(0,0,0,0.54);font-size:1.4em;line-height: 1.6em;">Search the hottest properties in your neighborhood or ward.</p>
+  	<md-button class="md-primary md-hue-2 md-raised" ng-click="advancedSearch()" aria-label="Learn More">
+      <md-tooltip md-direction="bottom">
+      How do I use this?
+      </md-tooltip>
+      <span style="text-transform: initial;">Learn More</span>
+    </md-button>
+  </div>
+  <span flex></span>
+  <div style="margin-left:10px">
+  	<img show-gt-sm hide src="./mapimage.png" height="206">
+  </div>
+  <span flex="10"></span>
 </div>
-<span flex-gt-xs="20"></span>
 </div>
+
+
+<section layout="row" flex>
+	<md-sidenav class="md-sidenav-left md-whiteframe-4dp" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left" class="">
+
+      <md-content ng-controller="LeftCtrl as cc" class="radioButtondemoMultiColumn">
+
+        <md-radio-group ng-model="$root.currentNavItem" class="" >
+      <div ng-repeat='level in $root.levels' class="row radioDemo2">
+        <div flex layout='row' layout-padding layout-align="start center" >
+
+          
+          <md-radio-button flex
+              ng-value="level.value"
+              ng-click="goto(level.value)"
+              class="md-primary" >
+             <span class="name">
+            {{level.name}}
+        </span>
+
+          </md-radio-button>
+          <span flex></span>
+          <div flex style="max-width:200px;">
+            <img ng-src="./level{{level.value}}.png" class="md-avatar" alt="{{level.name}}" height="50" />
+          </div>
+
+        </div>
+      </div>
+    </md-radio-group>
+      
+        </div>
+      </md-content>
+      
+    </md-sidenav>
+
+<md-content flex>
+<md-nav-bar hide-gt-sm style="height: 0px;" md-selected-nav-item="$root.currentNavItem" nav-bar-aria-label="navigation links">
+      <md-nav-item aria-label="Switch 1" md-nav-click="goto('3')" name="2"><img src="./level2.png" height="30px"></md-nav-item>
+      <md-nav-item aria-label="Switch 2" md-nav-click="goto('2')" name="1"><img src="./level1.png" height="30px"></md-nav-item>
+      <md-nav-item aria-label="Switch 3" md-nav-click="goto('1')" name="0"><img src="./level0.png" height="30px"></md-nav-item>
+      <span flex></span>
+    </md-nav-bar>
+	<md-toolbar class="md-whiteframe-2dp md-accent md-hue-2" aria-hidden="false">
+          <div class="md-toolbar-tools" layout-padding layout-xs="row" style="overflow:hidden">
+
+            <!-- <md-button class="md-icon-button" ng-click="advancedSearch()">
+              <md-tooltip md-direction="bottom">
+              Add a filter
+              </md-tooltip>
+              <md-icon md-font-icon="icon-playlist_add" ng-style="{'font-size': '24px','color':'rgba(2,136,209,0.87)'}"></md-icon>
+            </md-button> -->
+
+            <div flex-gt-xs="30" flex="75" class="toolbarSearchGrey">
+              
+            </div>
+            <span flex show hide-gt-sm></span>
+            <md-button class="md-icon-button" ng-click="advancedSearch()">
+	              <md-tooltip md-direction="bottom">
+	              Map layers
+	              </md-tooltip>
+	              <md-icon md-font-icon="icon-layers" ng-style="{'font-size': '24px','color':'rgba(2,136,209,0.87)'}"></md-icon>
+	            </md-button>
+
+          </div>
+        </md-toolbar>
+
+	<div layout="row">
+
+		<div layout-fill>
+			<md-tabs md-dynamic-height md-border-bottom>
+		      <md-tab label="list">
+		        <md-content class="md-padding">
+		          <md-card md-theme="{{ $root.currentNavItem | showTheme }}" md-theme-watch>
+		        <md-card-title>
+		          <md-card-title-text layout="row">
+		            <span class="md-headline" style="text-shadow: 1px 0px 1px rgba(0, 0, 0, 0.63);">{{$root.currentNavItem | showTitle}}</span>
+		            <span flex></span>
+		            <span class="md-subhead">
+		            	<md-button class="md-icon-button md-fab md-hue-3" aria-label="Customize" ng-click="$root.toggleList('right')">
+              <md-tooltip md-direction="bottom">
+              Customize this list
+              </md-tooltip>
+              <md-icon md-font-icon="icon-filter_list" ng-style="{'font-size': '24px','color':'rgba(2,136,209,0.87)'}"></md-icon>
+            </md-button></span>
+		          </md-card-title-text>
+		        </md-card-title>
+		        <md-card-content layout="column" layout-align="space-between">
+					<md-table-container flex="100">
+					<md-progress-linear ng-show="searching" md-mode="indeterminate"></md-progress-linear>
+					
+					<table class="md-primary" md-table>
+						<thead md-head md-order="ul.taxQuery.order" md-trigger="ul.onOrderChange">
+						<tr md-row>
+						  <th md-column name="tax_period">OPAID</th>
+						  <th md-column name="principal">Address</th>
+						  <th md-column name="principal">Type</th>
+						  <th md-column name="interest">Sale Date</th>
+						</tr>
+						</thead>
+						<tbody md-body>
+							<tr md-row ng-repeat="prop in $root.hotList | limitTo: $root.hotListQuery.limit: ($root.hotListQuery.page -1) * $root.hotListQuery.limit">
+							  <td md-cell>
+							  	<md-button ng-click="ul.viewListings(prop.id)">
+							    {{prop.opaid}}
+							</md-button>
+							  </td>
+							  <td md-cell>{{prop.address}}</td>
+							  <td md-cell>{{prop.type}}</td>
+							  <td md-cell>{{prop.timestamp | formatPHPTime}}</td>
+							</tr>
+						</tbody>
+					</table>
+					</md-table-container>
+
+					<md-table-pagination md-limit="$root.hotListQuery.limit" md-limit-options="[5, 10, 15]" md-page="$root.hotListQuery.page" md-total="{{$root.hotList.length}}" md-page-select></md-table-pagination>
+					
+				</md-card-content>
+		        <md-card-actions layout="row" layout-align="end center">
+		          <md-button ng-click="land()">Email</md-button>
+		          <md-button>Print</md-button>
+		        </md-card-actions>
+	      	</md-card>
+		        </md-content>
+		      </md-tab>
+		      <md-tab label="map">
+		        <md-content class="md-padding" layout-gt-xs="row" ng-controller="MapController as map">
+		        <div class="inset" layout="column" ng-cloak hide show-gt-sm>
+		        	<span class="md-subhead">Layers</span>
+				  <md-switch ng-repeat='layer in $root.mapLayers' ng-model="layer.value" aria-label="Switch 1">
+				    icon
+				  </md-switch>
+				</div>
+
+				<div flex layout-fill id="map-canvas" ></div>
+
+				  
+		      </md-tab>
+		      
+		    </md-tabs>
+			
+		</div>
+		<!-- <span flex="10"></span> -->
+	</div>
+</md-content>
+</div>
+<md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="right">
+
+      <md-toolbar class="md-theme-light md-hue-3">
+      <div layout="row">
+        <h1 class="md-toolbar-tools">{{$root.currentNavItem | showTitle}} Filters</h1>
+        <span flex></span>
+          <md-icon md-font-icon="icon-close" ng-click="$root.toggleList('right')" ng-style="{'font-size':'34px','color':'#ffffff'}" aria-label="Close dialog"></md-icon>
+        
+	  </div>
+      </md-toolbar>
+      <md-content ng-controller="RightCtrl">
+        <md-progress-circular ng-show class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
+        <md-input-container>
+                <label>{{$root.overlayTitle}}</label>
+                <md-select ng-disabled="!$root.neighborhoods" md-no-underline md-on-open="loadNeighborhoods()" ng-model="$root.activeSearch.bounds" multiple>
+                  <md-optgroup label="Neighborhoods">
+                    <md-option ng-value="n" ng-repeat="n in $root.neighborhoods">{{n.listname}}</md-option>
+                  </md-optgroup>
+                  <md-optgroup label="Wards">
+                    <md-option ng-value="n" ng-repeat="n in $root.wards">{{n.listname}}</md-option>
+                  </md-optgroup>
+                </md-select>
+              </md-input-container>
+        
+
+        <md-radio-group ng-model="$root.activeFilter" class="" >
+        <md-subheader>Filters</md-subheader>
+      <div ng-repeat='f in $root.searchFilters' class="row radioDemo2">
+        <div flex layout='row' layout-margin layout-align="start start" >
+
+          
+          <md-radio-button flex
+              ng-value="$index"
+              class="md-primary" >
+             <span>
+	            {{f.name}}
+	        </span>
+
+          </md-radio-button>
+            <md-icon md-font-icon="icon-mode_edit" ng-click="land()" class="md-avatar chat-avatar" alt="Icon" ng-style="{'font-size':'24px','height':'24px'}"></md-icon>
+            <md-icon ng-show="f.canDelete" md-font-icon="icon-delete_forever" ng-click="land()" class="md-avatar chat-avatar" alt="Icon" ng-style="{'font-size':'24px','height':'24px'}"></md-icon>
+        </div>
+      </div>
+    </md-radio-group>
+
+        <md-list flex style="padding:0px 0px">
+        <md-list-item>
+          
+          <md-button ng-click="land()" class="md-primary">
+          <md-icon height="40" md-font-icon="icon-playlist_add" class="md-avatar chat-avatar" alt="Icon" ng-style="{'font-size':'24px','height':'24px'}"></md-icon> Create a Filter
+        </md-button>
+        </md-list-item>
+      </md-list>
+          
+        
+          <md-button ng-click="close()" class="md-primary">
+          Done
+        </md-button>
+        </div>
+      </md-content>
+      
+    </md-sidenav>

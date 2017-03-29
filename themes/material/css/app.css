@@ -11,7 +11,7 @@ fieldset{
 }
 
 #map-canvas {
-  min-height: 500px;
+  min-height: 200px;
 }
 
 /*.mainTitle{
@@ -20,12 +20,8 @@ fieldset{
 
 .toolbarSearchGrey {
     height: 48px;
-    max-width: 720px;
-    background: rgba(24, 41, 62, 0.2);
     /* background: rgba(255,255,255,.15); */
     box-sizing: border-box;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
 }
 
 .toolbarSearchGrey md-input-container{
@@ -236,6 +232,56 @@ md-bottom-sheet  md-icon {
 
 span.name {
   font-weight: bold;
-  font-size:1.1em;
+  font-size:1.5em;
   padding-left:5px;
 }
+
+.radioButtondemoMultiColumn div.radioDemo2 {
+  /*margin-bottom: 20px; */
+  }
+
+.radioButtondemoMultiColumn h2 {
+  margin-left: 15px; }
+
+.radioButtondemoMultiColumn p {
+  width: 400px;
+  margin-top: 10px;
+  margin-left: 10px;
+  padding-top: 10px;
+  border-top: 2px solid #ddd; }
+
+.radioButtondemoMultiColumn .md-checked {
+  background-color: #ECFAFB;
+  border-radius: 2px; }
+
+.radioButtondemoMultiColumn md-button.md-raised, .radioButtondemoMultiColumn button.md-raised {
+  width: 200px; }
+
+.radioButtondemoMultiColumn .row {
+  border-bottom: 1px dashed #ddd; }
+
+.radioButtondemoMultiColumn div.row:last-child {
+  border-bottom: 0px dashed #ddd; }
+
+.radioButtondemoMultiColumn .summary {
+  width: 100%;
+  padding-top: 10px;
+  margin-left: 25px;
+  margin-top: 20px;
+  margin-bottom: -5px; }
+
+.radioButtondemoMultiColumn .title {
+  font-weight: bolder; }
+
+.radioButtondemoMultiColumn .selectedUser .md-checked {
+  padding: 8px;
+  width: 100px; }
+
+  .info-box .info-line {
+    margin-bottom: 24px; }
+  .info-box .info-line .title {
+      font-size: 15px;
+      font-weight: 700;
+      padding-bottom: 4px; }
+  .info-box .info-line:last-child {
+      margin-bottom: 0; }

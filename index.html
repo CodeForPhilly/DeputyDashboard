@@ -4,6 +4,7 @@
         <!-- start: Meta. Tagz -->
         
         <title>DeputyDashboard</title>
+        <base href="/">
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" > 
  
@@ -15,21 +16,13 @@
         <!-- style sheet -->
     </head>
     <body ng-app="materialApp" ng-controller="LandingCtrl as ul">
-        <div layout="column" layout-fill>
-            <div ui-view flex layout="column"></div>
-            <footer ng-cloak layout-align="end end" layout-align-xs="start start" layout="row">
-              <span flex show-gt-xs hide></span>
-              <md-content layout-margin layout="row" layout-xs="row" style="color:#afafaf">
-              <p><a href="">About</a></p>
-              <p><a href="">Privacy</a></p>
-              <p>&copy; 2016 deputydashboard</p>
-            </md-content>
-            </footer>
-        </div>
+        <div ui-view layout="column"></div>
 
     <!-- Script Files -->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2ROrsm75GOmLCISyIEs1y02_OVU3vS4g&libraries=places"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCoBZpgeXQbREj6ZfgPxCj6wJLgKS9cHrY&libraries=places,geometry"></script>
     <script type="text/javascript" src="./bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="./bower_components/buffer/buffer.js"></script>
+    <script type="text/javascript" src="./bower_components/wkx/dist/wkx.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
     <script src="./bower_components/angular-route/angular-route.js"></script>
     <script src="./bower_components/angular-sanitize/angular-sanitize.js"></script>
@@ -46,8 +39,10 @@
     <script src="./themes/material/js/app.storage.js"></script>
     <script src="./themes/material/js/dashboard.js"></script>
     <script src="./themes/material/js/landing.js"></script>
+    <script src="./themes/material/js/sv.js"></script>
     <script src="./themes/material/js/map.js"></script>
     <script src="./themes/material/js/home.js"></script>
+    <script src="./themes/material/js/qrgen.js"></script>
     <script src="./themes/material/js/property.js"></script>
         
   </body>

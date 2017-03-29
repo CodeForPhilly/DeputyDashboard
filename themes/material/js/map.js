@@ -2,255 +2,204 @@
 "use strict";
 angular
   .module('materialApp')
-  .controller('MapCtrl', function($rootScope,$state,$scope,$mdBottomSheet,$mdDialog,$mdToast,$http,$filter,$mdMedia,$timeout,$firebaseArray,$sce,$cordovaCamera) {
-	$rootScope.gAddress = null;
-  $rootScope.parcelId = null;
-  $rootScope.position = {};
-  $rootScope.map = null;
-  $rootScope.fabOpen = false;
-  $rootScope.distanceUnit = 'mi';
-  $rootScope.speedUnit = "mph";
-  $rootScope.PlayPauseText = "start";
-  $rootScope.showSort = true;
-  $rootScope.parcelIcon = "./themes/material/img/dot.png";
-  document.addEventListener("deviceready", function () {
-      var networkState = navigator.connection.type;
+  .controller('MapController', [
+  '$rootScope', '$http','$location','$mdSidenav','$mdBottomSheet','$mdDialog','$mdToast',
+  MapController
+])
 
-      var states = {};
-      $rootScope.initialLimit = 40;
-      states[Connection.UNKNOWN]  = 'Unknown connection';
-      states[Connection.ETHERNET] = 'Ethernet connection';
-      states[Connection.WIFI]     = 'WiFi connection';
-      states[Connection.CELL_2G]  = 'Cell 2G connection';
-      states[Connection.CELL_3G]  = 'Cell 3G connection';
-      states[Connection.CELL_4G]  = 'Cell 4G connection';
-      states[Connection.CELL]     = 'Cell generic connection';
-      states[Connection.NONE]     = 'No network connection';
+function MapController($rootScope,$scope,$location,$route,$mdSidenav, $mdBottomSheet,$mdDialog,$mdToast, $log,$state,$stateParams, $q,$filter,$http,$mdMedia,$firebaseArray,$firebaseObject){
+  var vm = this;
+  $rootScope.overlayTitle = "Loading Neighborhoods"
 
-      if(networkState == Connection.CELL_3G || networkState == Connection.CELL_3G){
-        $rootScope.initialLimit = 5;
+  vm.mapStyle = [
+  {
+    "elementType": "geometry",
+    "stylers": [
+      { "invert_lightness": true }
+    ]
+  },{
+    "featureType": "landscape",
+    "stylers": [
+      { "visibility": "simplified" },
+      { "invert_lightness": true }
+    ]
+  },{
+    "featureType": "landscape",
+    "elementType": "geometry.fill",
+    "stylers": [
+      { "visibility": "on" },
+      { "lightness": 100 },
+      { "color": "#f9fff9" }
+    ]
+  },{
+    "featureType": "road",
+    "elementType": "geometry.fill",
+    "stylers": [
+      { "lightness": 77 }
+    ]
+  },{
+    "featureType": "road",
+    "elementType": "labels.text",
+    "stylers": [
+      { "visibility": "simplified" }
+    ]
+  },{
+  },{
+    "featureType": "transit",
+    "elementType": "geometry.fill",
+    "stylers": [
+      { "color": "#f14728" },
+      { "weight": 1 }
+    ]
+  },{
+    "featureType": "water",
+    "elementType": "geometry.fill",
+    "stylers": [
+      { "lightness": 69 }
+    ]
+  },{
+    "featureType": "water",
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      { "visibility": "simplified" }
+    ]
+  },{
+    "featureType": "administrative.neighborhood",
+    "elementType": "labels",
+    "stylers": [
+      { "visibility": "simplified" },
+      { "saturation": -30 },
+      { "color": "#252651" },
+      { "invert_lightness": true },
+      { "lightness": -41 }
+    ]
+  },{
+    "featureType": "poi",
+    "elementType": "geometry.fill",
+    "stylers": [
+      { "lightness": 52 }
+    ]
+  },{
+    "featureType": "poi",
+    "elementType": "labels.text",
+    "stylers": [
+      { "visibility": "simplified" }
+    ]
+  },{
+    "featureType": "road",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      { "lightness": 87 }
+    ]
+  },{
+    "featureType": "poi.school",
+    "elementType": "geometry",
+    "stylers": [
+      { "lightness": 12 }
+    ]
+  },{
+    "featureType": "poi.medical",
+    "elementType": "geometry.fill",
+    "stylers": [
+      { "invert_lightness": true },
+      { "visibility": "on" },
+      { "lightness": 44 }
+    ]
+  },{
+    "featureType": "road",
+    "elementType": "labels.icon",
+    "stylers": [
+      { "visibility": "simplified" }
+    ]
+  },{
+  }
+  ];
+
+  vm.showNeighborhoods = function(){
+    angular.forEach($rootScope.neighborhoods, function(v, k) {
+      var hexAry = v.the_geom.match(/.{2}/g);
+      var intAry = [];
+      for (var i in hexAry) {
+        intAry.push(parseInt(hexAry[i], 16));
       }
+      console.log(intAry);
+      // Generate the buffer
+      var wkx = require('wkx');
+      var buf = new buffer.Buffer(intAry);
+    });
+    
+  }
 
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+  vm.radii = [
+    {size:50,  name:"50m"},
+    {size:1000,name:"1000m"},
+    {size:1500,name:"1500m"}
+  ];
+
+  vm.styledMap = new google.maps.StyledMapType(vm.mapStyle,
+    {name: "Map"});
+  vm.radius = 50;
+  vm.locations = {
+    "PDHQ": [39.954188,-75.1506003]
+  };
+
+    
+
+  $rootScope.districtsLayer = new google.maps.FusionTablesLayer({
+    query: {
+    select: 'geometry',
+    from: '1YQieDtKgggPk_dXclvAj73rEl-GULkZdHzESaJ5S'
+    },
+    styles: [{
+    polygonOptions: {
+      strokeColor: "#5d3829",
+      fillColor: "#92a381",
+      strokeOpacity: "0.7",
+      strokeWeight: "int",
+      fillOpacity:"0.1"
+    }}]
+  });
+
+  vm.mapCenter = new google.maps.LatLng(39.954188,-75.1506003);
+  var mapOptions = {
+    zoom: 12,
+    center: vm.mapCenter,
+    mapTypeControlOptions:{
+      mapTypeIds: [google.maps.MapTypeId.SATELLITE,'map_style']
     }
-    if(window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
-    }
+  };
 
-    function onMapInit(map) {
-      $rootScope.map.setClickable(true);
-      // $rootScope.map.setMapTypeId(plugin.google.maps.MapTypeId.ROAD);
-      $rootScope.map.setBackgroundColor('rgba(0,0,0,0)');
-      var evtName = plugin.google.maps.event.MAP_LONG_CLICK;
-      // $rootScope.map.on(evtName, function(latLng) {
-      //     alert("Map was long clicked.\n" +
-      //         latLng.toUrlValue());
-      // });
-
-      if($rootScope.currentParcel !== undefined && $rootScope.currentParcel != null){
-        //add location marker
-
-        $rootScope.map.addMarker({
-          'position': new plugin.google.maps.LatLng($rootScope.currentParcel.geometry.y,$rootScope.currentParcel.geometry.x),
-          'title': $rootScope.currentParcel.full_address,
-          'animation': plugin.google.maps.Animation.DROP,
-          'icon': $rootScope.parcelIcon
-        }, function(marker) {
-
-          marker.showInfoWindow();
-          marker.addEventListener(plugin.google.maps.event.MARKER_CLICK, function() {
-            $state.go('p',{id:$rootScope.currentParcel.account_number,city:$rootScope.currentCity})
-          });
-
-        });
-
-
-        //get neighborhood
-        // Split WKB into array of integers (necessary to turn it into buffer)
-        var hexAry = $rootScope.currentParcel.neighborhood.the_geom.match(/.{2}/g);
-        var intAry = [];
-        for (var i in hexAry) {
-          intAry.push(parseInt(hexAry[i], 16));
-        }
-        // console.log(intAry);
-        // Generate the buffer
-        var wkx = require('wkx');
-        var buf = new buffer.Buffer(intAry);
-
-        // Parse buffer into geometric object
-        var geom = wkx.Geometry.parse(buf);
-        var points = geom.toGeoJSON().coordinates[0][0];
-        $rootScope.currentParcel.neighborhood.geoJson = [];
-        angular.forEach(points,function(value, key){
-            // $scope.results.push(value.raw);
-            $rootScope.currentParcel.neighborhood.geoJson.push(new plugin.google.maps.LatLng(value[1],value[0]));
-          
-        });
-        // console.log($rootScope.currentParcel.neighborhood.geoJson);
-        $rootScope.map.addPolygon({
-          'points': $rootScope.currentParcel.neighborhood.geoJson,
-          'strokeColor' : '#0d47a1',
-          'strokeWidth': 5,
-          'fillColor' : '#0d48a01f'
-        }, function(polygon) {
-          polygon.on(plugin.google.maps.event.OVERLAY_CLICK, function(overlay, latLng) {
-            $mdToast.show(
-              $mdToast.simple()
-              .content("Neighborhood: "+$rootScope.currentParcel.neighborhood.listname)
-              .position('top right')
-              .hideDelay(3000)
-            );
-          });
-          // $rootScope.map.animateCamera({
-          //   'target': polygon.getPoints()
-          // });
-        });
-      }else{
-        //Get Nearby Parcels
-        $rootScope.showNearby = true;
-          //Query nearby parcels
-          $mdToast.show(
-            $mdToast.simple()
-            .content("Loading nearby deals")
-            .position('top right')
-            .hideDelay(3000)
-          );
-          //Get List to pass to dialog
-          $rootScope.currentCity = "philly";
-          var url = "https://api.phila.gov/opa/v1.1/nearby/"+$rootScope.position.coords.longitude+"/"+$rootScope.position.coords.latitude+"/700?format=json";
-          
-          $http.get(url)
-          .success(function(response){
-            $scope.searching = false;
-            var r = response;
-            angular.forEach(r.data.properties,function(value, key){
-                // $scope.results.push(value.raw);
-                
-                $scope.addMarker(value);
-                // $rootScope.map.addMarker({
-                //   'position': new plugin.google.maps.LatLng(value.geometry.y,value.geometry.x),
-                //   'title': value.full_address,
-                //   'icon': $rootScope.parcelIcon
-                // }, function(marker) {
-
-                //   marker.showInfoWindow();
-                //   marker.addEventListener(plugin.google.maps.event.MARKER_CLICK, function() {
-                //     $state.go('p',{id:value.account_number,city:$rootScope.currentCity})
-                //   });
-
-                // });
-            });
-          })
-          .error(function(data, status, headers, config){
-            $scope.searching = false;
-            $mdToast.show(
-              $mdToast.simple()
-              .content("An error Occured.")
-              .position('top right')
-              .hideDelay(3000)
-            );
-            console.log(data);
-          });
-        }
-
-
-
-      // $rootScope.map.addKmlOverlay({
-      //   'url':'https://developers.google.com/kml/documentation/kmlfiles/animatedupdate_example.kml'
-      // }, function(kmlOverlay) {
-      //   // kmlOverlay.on(plugin.google.maps.event.OVERLAY_CLICK, function(overlay, latLng) {
-      //   //   if (overlay.type == "Polygon") {
-      //   //     overlay.setFillColor("red");
-      //   //   }
-      //   //   if (overlay.type == "Polyline") {
-      //   //     overlay.setColor("blue");
-      //   //   }
-      //   //   if (overlay.type == "Marker") {
-      //   //     overlay.showInfoWindow();
-      //   //   }
-      //   // });
-      // })
-      
-    }
-
-
-    var onSuccess = function(position) {
-      $rootScope.position = position;
-        // alert('Latitude: '          + position.coords.latitude          + '\n' +
-        //       'Longitude: '         + position.coords.longitude         + '\n' +
-        //       'Altitude: '          + position.coords.altitude          + '\n' +
-        //       'Accuracy: '          + position.coords.accuracy          + '\n' +
-        //       'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
-        //       'Heading: '           + position.coords.heading           + '\n' +
-        //       'Speed: '             + position.coords.speed             + '\n' +
-        //       'Timestamp: '         + position.timestamp                + '\n');
-      var div = document.getElementById("map_canvas");
-
-      if($rootScope.currentParcel !== undefined && $rootScope.currentParcel != null){
-        $rootScope.startPosition = new plugin.google.maps.LatLng($rootScope.currentParcel.geometry.y,$rootScope.currentParcel.geometry.x);
-        
-      }else{
-        $rootScope.startPosition = new plugin.google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-      
-      }
-
-      $scope.addMarker = function(value){
-        console.log(value);
-        // $rootScope.map.addMarker({
-        //   'position': new plugin.google.maps.LatLng(value.geometry.y,value.geometry.x),
-        //   'title': value.full_address,
-        //   'icon': $rootScope.parcelIcon
-        // }, function(marker) {
-
-        //   marker.showInfoWindow();
-        //   marker.addEventListener(plugin.google.maps.event.MARKER_CLICK, function() {
-        //     $state.go('p',{id:value.account_number,city:$rootScope.currentCity})
-        //   });
-
-        // });
-      }
-        
-      $rootScope.map = plugin.google.maps.Map.getMap(div,{
-      'controls': {
-        'compass': true,
-        'myLocationButton': true,
-        'indoorPicker': false,
-        'zoom': true
-      },
-      'gestures': {
-        'scroll': true,
-        'tilt': true,
-        'rotate': true,
-        'zoom': true
-      },
-      'camera': {
-        'latLng': $rootScope.startPosition,
-        'tilt': 30,
-        'zoom': 15
-      }
-      });
-
-      
-
-      angular.element(document).ready(function () {
-        $rootScope.map.on(plugin.google.maps.event.MAP_READY, onMapInit);
-      });
-
-
-    }
-
-    // onError Callback receives a PositionError object
-    //
-    function onError(error) {
-        console.log('code: '    + error.code    + '\n' +
-              'message: ' + error.message + '\n');
-    }
-
-    navigator.geolocation.getCurrentPosition(onSuccess, onError);
-
-});
+  if($rootScope.map === undefined){
+    $rootScope.map = new google.maps.Map(document.getElementById("map-canvas"),
+      mapOptions);
+    $rootScope.map.mapTypes.set('map_style', vm.styledMap);
+    $rootScope.map.setMapTypeId('map_style');
+    $rootScope.districtsLayer.setMap($rootScope.map);
+    
+  }
   
-});
-
+  if(!$rootScope.neighborhoods){
+    firebase.database().ref().child('neighborhoods').child('philly').once('value').then(function(snapshot) {
+      $rootScope.neighborhoods = snapshot.val();
+      $rootScope.storage.setItem("deputy_neighborhoods",JSON.stringify($rootScope.neighborhoods));
+      $rootScope.overlayTitle = "Neighborhood or Ward";
+      
+      console.log($rootScope.neighborhoods)
+      // ...
+      // vm.showNeighborhoods();
+      
+    });
+  }else{
+    $rootScope.overlayTitle = "Neighborhood or Ward";
+  }
+      
+    /* Adds new vehicle markers to the map when they enter the query */
+vm.showDetails = function(){
+  $mdToast.show(
+    $mdToast.simple()
+    .content("This action is under construction.")
+    .position('top right')
+    .hideDelay(4000)
+  );
+}
+}
