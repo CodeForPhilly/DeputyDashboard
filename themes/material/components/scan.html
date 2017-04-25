@@ -1,0 +1,47 @@
+<md-toolbar ng-cloak class="md-whiteframe-4dp" aria-hidden="false">
+  <div class="md-toolbar-tools" layout-padding>
+    <md-button class="md-icon-button" ng-click="ul.reportIssue($event)" aria-label="Show issues dialog">
+    <md-icon md-font-icon="icon-arrow_back" ng-style="{'color':'#fff','height':'24px','font-size':'24px'}"></md-icon>
+    </md-button>
+    <h2 class="mainTitle" style="color:#fff">Permit Verify</h2>
+    <span flex="5"></span>
+    <span flex></span>
+    <!-- <md-button class="md-accent md-hue-2" ng-click="land()">
+      <md-tooltip md-direction="bottom">
+      What is this?
+      </md-tooltip>
+      <span style="text-transform: initial;">About</span>
+    </md-button> -->
+    <md-button class="md-icon-button" ng-click="ul.toggleList('right')" aria-label="Show Results List">
+    <md-icon md-font-icon="icon-more_vert" ng-style="{'font-size': '24px','color':'#fff'}"></md-icon>
+    </md-button>
+  </div>
+</md-toolbar>
+<md-toolbar ng-cloak class="md-whiteframe-4dp md-hue-2" aria-hidden="false">
+<div class="md-toolbar-tools" layout-padding layout="row">
+<h4 style="color:#ddd;text-align:center" flex="100">Scan code to view permit</h4>
+</div>
+</md-toolbar>
+<div layout-fill flex ng-controller="ScanController as vm" ng-cloak layout="column">
+	<div layout="column" layout-align="start start">
+	<video id="video" width="100%" autoplay></video>
+	<!-- <button id="snap">Snap Photo</button> -->
+	<!-- <button id="snap">Snap Photo</button> -->
+	<div layout-fill>
+	<md-card md-theme="dark-grey" md-theme-watch>
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Scanning...</span>
+            <span class="md-subhead"></span>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-actions layout="row" layout-align="end center">
+          <md-button ng-show="$root.scanResult">Action 1</md-button>
+          <md-button class="md-raised">Help! I am having trouble scanning</md-button>
+        </md-card-actions>
+      </md-card>
+  </div>
+	</div>
+	
+	<canvas hide-sm id="canvas" width="0" height="0"></canvas>
+</div>

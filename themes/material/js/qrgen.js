@@ -136,12 +136,12 @@ angular
       $rootScope.storage.setItem('currentSearch',JSON.stringify(d));
       $rootScope.searchHistory.push(d);
       $rootScope.storage.setItem('searchHistory',JSON.stringify($rootScope.searchHistory));
-
-      vm.permitResults = $firebaseArray(firebase.database().ref().child('philadelphia').child('permits').child('lane_closures').orderByChild(vm.fieldName).equalTo(vm.query));
-      vm.permitResults.$loaded().then(function(){
-        if(vm.fieldName == "OBJECTID"){
+      if(vm.fieldName == "OBJECTID"){
           vm.query = Number(vm.query);
         }
+      vm.permitResults = $firebaseArray(firebase.database().ref().child('philadelphia').child('permits').child('lane_closures').orderByChild(vm.fieldName).equalTo(vm.query));
+      vm.permitResults.$loaded().then(function(){
+        
         if(vm.permitResults.length == 0)
         {
           var req = {

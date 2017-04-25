@@ -58,10 +58,10 @@ angular
         })
         
       $mdThemingProvider.theme('default')
-       .primaryPalette('blue',{
-        'default': '400', // by default use shade 400 from the pink palette for primary intentions
+       .primaryPalette('indigo',{
+        'default': '900', // by default use shade 400 from the pink palette for primary intentions
         'hue-1': '200', // use shade 100 for the <code>md-hue-1</code> class
-        'hue-2': '900', // use shade 600 for the <code>md-hue-2</code> class
+        'hue-2': '400', // use shade 600 for the <code>md-hue-2</code> class
         'hue-3': 'A400' // use shade A100 for the <code>md-hue-3</code> class
       })
       .accentPalette('grey',{
@@ -87,8 +87,8 @@ angular
         'hue-3': 'A400' // use shade A100 for the <code>md-hue-3</code> class}).dark();
       }).dark();
       $mdThemingProvider.theme('dark-purple').backgroundPalette('deep-purple').dark();
-      $mdThemingProvider.theme('dark-blue').backgroundPalette('blue',{
-      'default': '900', // by default use shade 400 from the pink palette for primary intentions
+      $mdThemingProvider.theme('dark-blue').backgroundPalette('indigo',{
+      'default': 'A100', // by default use shade 400 from the pink palette for primary intentions
         'hue-1': '300', // use shade 100 for the <code>md-hue-1</code> class
         'hue-2': '900', // use shade 600 for the <code>md-hue-2</code> class
         'hue-3': 'A400' // use shade A100 for the <code>md-hue-3</code> class}).dark();
@@ -210,7 +210,7 @@ angular
 .filter('formatStreetPermitURL',function(){
   return function(input){
     var d = input.slice(0,4) + "-" + input.slice(4,input.length);
-    return 'https://stsweb.phila.gov/StreetClosureAPI/api/Permits/GetPermitPdf.pdf?permitId='+d;
+    return 'https://stsweb.phila.gov/StreetClosureAPI/api/Permits/GetPermitPdf.pdf/?permitId='+d;
   }
 })
 .filter('formatTime',function(){
